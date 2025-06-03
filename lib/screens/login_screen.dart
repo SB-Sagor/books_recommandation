@@ -95,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Container(
                       height: MediaQuery.of(context).size.height * 0.6,
                       decoration: BoxDecoration(
-                        color: AppColors.background,
+                          color: AppColors.background,
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(80),
                               topRight: Radius.circular(80))),

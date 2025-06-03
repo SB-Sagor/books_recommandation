@@ -89,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: Text(
           "Book Recommended",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         backgroundColor: AppColors.bgColor,
       ),
@@ -98,9 +98,9 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: EdgeInsets.zero,
           children: [
             DrawerHeader(
-              decoration: BoxDecoration(color: Colors.black),
+              decoration: BoxDecoration(color: AppColors.bgColor),
               child: Text("Admin Panel",
-                  style: TextStyle(color: Colors.white, fontSize: 24)),
+                  style: TextStyle(color: Colors.black, fontSize: 24)),
             ),
             ListTile(
               leading: Icon(Icons.person),

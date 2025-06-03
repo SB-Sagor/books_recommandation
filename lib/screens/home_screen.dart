@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:book_store/admin_panel.dart';
-import 'package:book_store/forgot_password_screen.dart';
-import 'package:book_store/login_screen.dart';
-import 'package:book_store/upload_book_screen.dart';
+import 'package:book_store/screens/forgot_password_screen.dart';
+import 'package:book_store/screens/login_screen.dart';
+import 'package:book_store/screens/upload_book_screen.dart';
+import 'package:book_store/widgets/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
@@ -76,9 +77,10 @@ class _HomeScreenState extends State<HomeScreen> {
   // Updated logout function
   Future<void> logout() async {
     await FirebaseAuth.instance.signOut(); // Sign out the user
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => LoginScreen()) // Replace with your login screen
-    );
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) =>
+                LoginScreen()) // Replace with your login screen
+        );
   }
 
   @override
@@ -89,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
           "Book Recommended",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.black,
+        backgroundColor: AppColors.bgColor,
       ),
       drawer: Drawer(
         child: ListView(
@@ -109,8 +111,10 @@ class _HomeScreenState extends State<HomeScreen> {
               leading: Icon(Icons.admin_panel_settings),
               title: Text("Admin Panel"),
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => UploadBookFirestore()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => UploadBookFirestore()));
               },
             ),
             Divider(),
@@ -140,33 +144,34 @@ class _HomeScreenState extends State<HomeScreen> {
           isLoading
               ? Center(child: CircularProgressIndicator())
               : Expanded(
-            child: recommendedBooks.isEmpty
-                ? Center(child: Text("No recommendations found"))
-                : ListView.builder(
-              itemCount: recommendedBooks.length,
-              itemBuilder: (context, index) {
-                var book = recommendedBooks[index]['volumeInfo'];
-                var imageUrl = book['imageLinks'] != null
-                    ? book['imageLinks']['thumbnail']
-                    : null;
-                return ListTile(
-                  title: Text(book['title'] ?? "No Title"),
-                  subtitle: Text(book['authors'] != null
-                      ? book['authors'].join(', ')
-                      : 'Unknown Author'),
-                  leading: imageUrl != null
-                      ? Image.network(imageUrl,
-                      width: 50, height: 50, fit: BoxFit.cover)
-                      : Container(
-                    width: 50,
-                    height: 50,
-                    color: Colors.grey,
-                    child: Icon(Icons.book, color: Colors.white),
-                  ),
-                );
-              },
-            ),
-          ),
+                  child: recommendedBooks.isEmpty
+                      ? Center(child: Text("No recommendations found"))
+                      : ListView.builder(
+                          itemCount: recommendedBooks.length,
+                          itemBuilder: (context, index) {
+                            var book = recommendedBooks[index]['volumeInfo'];
+                            var imageUrl = book['imageLinks'] != null
+                                ? book['imageLinks']['thumbnail']
+                                : null;
+                            return ListTile(
+                              title: Text(book['title'] ?? "No Title"),
+                              subtitle: Text(book['authors'] != null
+                                  ? book['authors'].join(', ')
+                                  : 'Unknown Author'),
+                              leading: imageUrl != null
+                                  ? Image.network(imageUrl,
+                                      width: 50, height: 50, fit: BoxFit.cover)
+                                  : Container(
+                                      width: 50,
+                                      height: 50,
+                                      color: Colors.grey,
+                                      child:
+                                          Icon(Icons.book, color: Colors.white),
+                                    ),
+                            );
+                          },
+                        ),
+                ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

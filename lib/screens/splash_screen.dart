@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'package:book_store/app_colors.dart';
-import 'package:book_store/auth_service.dart';
-import 'package:book_store/login_screen.dart';
+import 'package:book_store/widgets/app_colors.dart';
+import 'package:book_store/services/auth_service.dart';
+import 'package:book_store/screens/login_screen.dart';
 import 'package:book_store/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

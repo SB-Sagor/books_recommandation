@@ -1,5 +1,5 @@
-import 'package:book_store/home_screen.dart';
-import 'package:book_store/login_screen.dart';
+import 'package:book_store/screens/home_screen.dart';
+import 'package:book_store/screens/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

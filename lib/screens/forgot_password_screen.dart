@@ -1,3 +1,4 @@
+import 'package:book_store/widgets/custome_button.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -16,7 +17,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         await FirebaseAuth.instance
             .sendPasswordResetEmail(email: emailController.text.trim());
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Password reset email sent. Check your inbox.")),
+          SnackBar(
+              content: Text("Password reset email sent. Check your inbox.")),
         );
         Navigator.pop(
             context); // Go back to login screen after sending reset email
@@ -79,7 +81,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     return "Please enter your email";
                   }
                   if (!RegExp(
-                      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+                          r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
                       .hasMatch(value)) {
                     return "Enter a valid email";
                   }
@@ -87,19 +89,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 },
               ),
               SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    resetPassword();
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 40),
-                ),
-                child: Text("Send Reset Link",
-                    style: TextStyle(fontSize: 18, color: Colors.white)),
-              ),
+              customButton("Send Reset Link", () {
+                if (_formKey.currentState!.validate()) {
+                  resetPassword();
+                }
+              }),
             ],
           ),
         ),

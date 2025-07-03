@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:book_store/admin_panel.dart';
-import 'package:book_store/screens/forgot_password_screen.dart';
 import 'package:book_store/screens/login_screen.dart';
 import 'package:book_store/screens/upload_book_screen.dart';
 import 'package:book_store/widgets/app_colors.dart';

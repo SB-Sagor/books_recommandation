@@ -1,10 +1,9 @@
 import 'package:book_store/widgets/app_colors.dart';
 import 'package:book_store/widgets/custome_button.dart';
 import 'package:book_store/widgets/custome_textfield.dart';
-import 'package:book_store/screens/email_verification_screen.dart';
 import 'package:book_store/screens/login_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -19,50 +18,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Future<void> signUpWithEmail(BuildContext context) async {
+    final supabase = Supabase.instance.client;
+
     if (_formKey.currentState!.validate()) {
       try {
-        UserCredential userCredential =
-            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        final response = await supabase.auth.signUp(
           email: emailController.text.trim(),
           password: passwordController.text.trim(),
+          emailRedirectTo: 'io.supabase.bookstore://login-callback',
         );
 
-        User? user = userCredential.user;
-        if (user != null) {
-          await user.sendEmailVerification(); // Send verification email
-
-          // Show success message
+        if (response.user != null) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
                 content:
                     Text("Verification email sent. Please check your inbox.")),
           );
 
-          // Redirect to email verification screen
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => VerifyEmailScreen()),
+            MaterialPageRoute(builder: (context) => LoginScreen()),
           );
         }
-      } on FirebaseAuthException catch (e) {
-        String errorMessage;
-        switch (e.code) {
-          case 'email-already-in-use':
-            errorMessage = "This email is already registered.";
-            break;
-          case 'weak-password':
-            errorMessage =
-                "Your password is too weak. Please use a stronger password.";
-            break;
-          case 'invalid-email':
-            errorMessage = "Invalid email format.";
-            break;
-          default:
-            errorMessage = e.message ?? "An error occurred. Please try again.";
-        }
-
+      } on AuthException catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(errorMessage)),
+          SnackBar(content: Text(e.message)),
+        );
+      } catch (e) {  print("❌ Unexpected error: $e"); // 👈 Add this
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("An unexpected error occurred.")),
         );
       }
     }
@@ -71,7 +55,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
       body: Column(
         children: [
           Expanded(
@@ -88,20 +71,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Positioned(
                   top: 0,
                   left: 20,
-                  child: Image.asset(
-                    'images/light-1.png',
-                    width: 100,
-                    height: 180,
-                  ),
+                  child: Image.asset('images/light-1.png',
+                      width: 100, height: 180),
                 ),
                 Positioned(
                   top: 0,
                   left: 20,
-                  child: Image.asset(
-                    'images/light-2.png',
-                    width: 600,
-                    height: 180,
-                  ),
+                  child: Image.asset('images/light-2.png',
+                      width: 600, height: 180),
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
@@ -109,20 +86,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: Container(
                       height: MediaQuery.of(context).size.height * 0.6,
                       decoration: BoxDecoration(
-                          color: AppColors.background,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(80),
-                              topRight: Radius.circular(80))),
+                        color: AppColors.darkCard ,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(80),
+                          topRight: Radius.circular(80),
+                        ),
+                      ),
                       child: Form(
                         key: _formKey,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
                               "Sign Up",
                               style: TextStyle(
-                                color: Colors.white,
+                                color: AppColors.accent,
                                 fontSize: 34,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -138,13 +116,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 if (value == null || value.isEmpty) {
                                   return "Please enter your email";
                                 }
-                                if (!RegExp(
-                                        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+                                if (!RegExp(r'^[\w-.]+@([\w-]+\.)+[\w]{2,4}$')
                                     .hasMatch(value)) {
                                   return "Enter a valid email";
                                 }
                                 return null;
                               },
+                              autofillHints: [AutofillHints.email],
                             ),
                             SizedBox(height: 16),
                             CustomTextFormField(
@@ -188,9 +166,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             TextButton(
                               onPressed: () {
                                 Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => LoginScreen()));
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => LoginScreen()),
+                                );
                               },
                               child: Text("Already have an account? Sign in"),
                             ),

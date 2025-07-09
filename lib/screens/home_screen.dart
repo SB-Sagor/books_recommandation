@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:book_store/screens/login_screen.dart';
-import 'package:book_store/screens/upload_book_screen.dart';
-import 'package:book_store/widgets/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:book_store/screens/book_detail_screen.dart';
+import 'package:book_store/screens/login_screen.dart';
+import 'package:book_store/screens/upload_book_screen.dart';
+import 'package:book_store/screens/uploaded_books_screen.dart';
+import 'package:book_store/widgets/app_colors.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -14,71 +16,71 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   TextEditingController searchController = TextEditingController();
-  List<dynamic> recommendedBooks = [];
-  bool isLoading = false; // Loading state
-  Timer? _debounce; // Timer for debouncing
-  final String apiKey = 'AIzaSyD83nD_YintO_BE2RpKFZ5Qnq6qm8qTwdk';
+  List<dynamic> allBooks = [];
+  List<dynamic> filteredBooks = [];
+  bool isLoading = false;
+  String selectedCategory = "Trending";
+  Timer? _debounce;
+
+  final String apiKey = 'AIzaSyD83nD_YintO_BE2RpKFZ5Qnq6qm8qTwdk'; // Replace with your API key
+
+  final List<String> categories = [
+    "Trending",
+    "Popular",
+    "Horror",
+    "History",
+    "Science",
+    "Biography"
+  ];
 
   @override
   void initState() {
     super.initState();
+    fetchBooks("trending");
     searchController.addListener(_onSearchChanged);
   }
 
-  @override
-  void dispose() {
-    _debounce?.cancel();
-    searchController.removeListener(_onSearchChanged);
-    searchController.dispose();
-    super.dispose();
-  }
-
-  // Debounce method
   void _onSearchChanged() {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
-      searchBooks(searchController.text);
+      fetchBooks(searchController.text);
     });
   }
 
-  // Fetch book recommendations from Google Books API
-  Future<void> searchBooks(String query) async {
-    if (query.isEmpty) return; // Prevent unnecessary API calls
+  Future<void> fetchBooks(String query) async {
+    if (query.isEmpty) return;
 
-    setState(() {
-      isLoading = true;
-    });
+    setState(() => isLoading = true);
 
-    final url =
-        'https://www.googleapis.com/books/v1/volumes?q=$query&key=$apiKey';
+    final url = 'https://www.googleapis.com/books/v1/volumes?q=$query&key=$apiKey';
 
     try {
       final response = await http.get(Uri.parse(url));
-      if (response.statusCode == 200) {
-        final responseData = json.decode(response.body);
-        setState(() {
-          recommendedBooks = responseData['items'] ?? [];
-          isLoading = false;
-        });
-      } else {
-        throw Exception('Failed to fetch book recommendations');
-      }
-    } catch (error) {
+      final data = json.decode(response.body);
+
       setState(() {
+        allBooks = data['items'] ?? [];
+        filteredBooks = allBooks;
         isLoading = false;
       });
-      print("Error fetching books: $error");
+    } catch (e) {
+      print("Error fetching books: $e");
+      setState(() => isLoading = false);
     }
   }
 
-  // Logout function
-  // Updated logout function
+  void filterByCategory(String category) {
+    setState(() {
+      selectedCategory = category;
+      fetchBooks(category);
+    });
+  }
+
   Future<void> logout() async {
-    await FirebaseAuth.instance.signOut(); // Sign out the user
-    Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (context) =>
-                LoginScreen()) // Replace with your login screen
-        );
+    await Supabase.instance.client.auth.signOut(); //  Supabase logout
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => LoginScreen()),
+    );
   }
 
   @override
@@ -86,100 +88,209 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Book Recommended",
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          "BOOK RECOMMENDATIONS",
+          style: TextStyle(
+            color: AppColors.background,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        backgroundColor: AppColors.bgColor,
+        backgroundColor: AppColors.primary,
+        elevation: 0,
       ),
       drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
+        backgroundColor: AppColors.background,
+        child: Column(
           children: [
             DrawerHeader(
-              decoration: BoxDecoration(color: AppColors.bgColor),
-              child: Text("Admin Panel",
-                  style: TextStyle(color: Colors.black, fontSize: 24)),
+              decoration: BoxDecoration(color: AppColors.primary),
+              child: Align(
+                alignment: Alignment.bottomLeft,
+                child: Text(
+                  '📚 Book Menu',
+                  style: TextStyle(
+                    color: AppColors.background,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
             ),
             ListTile(
-              leading: Icon(Icons.person),
-              title: Text("Users"),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.admin_panel_settings),
-              title: Text("Admin Panel"),
+              leading: Icon(Icons.upload_file, color: AppColors.textPrimary),
+              title: Text('Upload Book',
+                  style: TextStyle(
+                      color: AppColors.textSecondary,
+                      fontWeight: FontWeight.bold)),
               onTap: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => UploadBookFirestore()));
+                  context,
+                  MaterialPageRoute(builder: (_) => UploadBookScreen()),
+                );
               },
             ),
-            Divider(),
             ListTile(
-              leading: Icon(Icons.logout, color: Colors.red),
-              title: Text("Logout", style: TextStyle(color: Colors.red)),
+              leading: Icon(Icons.library_books, color: AppColors.textPrimary),
+              title: Text('Uploaded Books',
+                  style: TextStyle(
+                      color: AppColors.textSecondary,
+                      fontWeight: FontWeight.bold)),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => UploadedBooksScreen()),
+                );
+              },
+            ),
+            Spacer(),
+            Divider(color: Colors.white24),
+            ListTile(
+              leading: Icon(Icons.logout, color: Colors.redAccent),
+              title: Text('Logout', style: TextStyle(color: Colors.redAccent)),
               onTap: logout,
             ),
+            SizedBox(height: 12),
           ],
         ),
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // 🔍 Search Bar
           Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(12),
             child: TextField(
               controller: searchController,
               decoration: InputDecoration(
-                labelText: "Search Books",
-                hintText: "Enter book name...",
+                hintText: "Search books...",
                 prefixIcon: Icon(Icons.search),
                 border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(22.0)),
+                  borderRadius: BorderRadius.circular(20),
+                ),
               ),
             ),
           ),
-          isLoading
-              ? Center(child: CircularProgressIndicator())
-              : Expanded(
-                  child: recommendedBooks.isEmpty
-                      ? Center(child: Text("No recommendations found"))
-                      : ListView.builder(
-                          itemCount: recommendedBooks.length,
-                          itemBuilder: (context, index) {
-                            var book = recommendedBooks[index]['volumeInfo'];
-                            var imageUrl = book['imageLinks'] != null
-                                ? book['imageLinks']['thumbnail']
-                                : null;
-                            return ListTile(
-                              title: Text(book['title'] ?? "No Title"),
-                              subtitle: Text(book['authors'] != null
-                                  ? book['authors'].join(', ')
-                                  : 'Unknown Author'),
-                              leading: imageUrl != null
-                                  ? Image.network(imageUrl,
-                                      width: 50, height: 50, fit: BoxFit.cover)
-                                  : Container(
-                                      width: 50,
-                                      height: 50,
-                                      color: Colors.grey,
-                                      child:
-                                          Icon(Icons.book, color: Colors.white),
-                                    ),
-                            );
-                          },
+
+          // 👤 Authors
+          SizedBox(
+            height: 90,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: filteredBooks.length.clamp(0, 10),
+              itemBuilder: (context, index) {
+                var book = filteredBooks[index]['volumeInfo'];
+                var authorName = (book['authors'] != null)
+                    ? book['authors'][0]
+                    : "Unknown";
+
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Column(
+                    children: [
+                      CircleAvatar(
+                        radius: 25,
+                        backgroundColor: Colors.grey.shade300,
+                        child: Text(
+                          authorName[0].toUpperCase(),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
                         ),
-                ),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        authorName.length > 6
+                            ? authorName.substring(0, 6) + "..."
+                            : authorName,
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+
+          // 🏷️ Categories
+          SizedBox(
+            height: 40,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: categories.length,
+              itemBuilder: (_, index) {
+                String cat = categories[index];
+                return Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  child: ChoiceChip(
+                    label: Text(cat),
+                    selected: selectedCategory == cat,
+                    onSelected: (_) => filterByCategory(cat),
+                    selectedColor: Colors.black,
+                    backgroundColor: Colors.grey.shade200,
+                    labelStyle: TextStyle(
+                      color: selectedCategory == cat
+                          ? Colors.white
+                          : Colors.black,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+
+          // 📚 Book List
+          isLoading
+              ? Expanded(child: Center(child: CircularProgressIndicator()))
+              : Expanded(
+            child: ListView.builder(
+              itemCount: filteredBooks.length,
+              itemBuilder: (context, index) {
+                var book = filteredBooks[index]['volumeInfo'];
+                var title = book['title'] ?? "No Title";
+                var authors = (book['authors'] ?? ["Unknown"]).join(', ');
+                var imageUrl = book['imageLinks']?['thumbnail'] ??
+                    "https://via.placeholder.com/100";
+                var description = book['description'] ?? "No description";
+                var previewLink = book['previewLink'] ?? '';
+                var pdfUrl = filteredBooks[index]['accessInfo']?['pdf']
+                ?['downloadLink'] ??
+                    '';
+
+                return ListTile(
+                  leading: CircleAvatar(
+                    backgroundImage: NetworkImage(imageUrl),
+                  ),
+                  title: Text(title),
+                  subtitle: Text(authors),
+                  onTap: () {
+                    if (pdfUrl.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            content:
+                            Text("No PDF available for this book")),
+                      );
+                      return;
+                    }
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => BookDetailScreen(
+                          title: title,
+                          author: authors,
+                          description: description,
+                          imageUrl: imageUrl,
+                          previewLink: previewLink,
+                          pdfUrl: pdfUrl,
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
         ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.favorite), label: "Favorite"),
-          BottomNavigationBarItem(icon: Icon(Icons.menu), label: "Menu"),
-        ],
-        selectedItemColor: Colors.black,
       ),
     );
   }

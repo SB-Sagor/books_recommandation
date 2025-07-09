@@ -1,22 +1,29 @@
 import 'package:book_store/screens/home_screen.dart';
 import 'package:book_store/screens/login_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthCheck extends StatelessWidget {
+  final supabase = Supabase.instance.client;
+
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
+    return StreamBuilder<AuthState>(
+      stream: supabase.auth.onAuthStateChange,
       builder: (context, snapshot) {
+
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator()); // Show a loading indicator while checking auth status
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Something went wrong: ${snapshot.error}')); // Display the error message
-        } else if (snapshot.hasData) {
-          return HomeScreen(); // User is logged in, show home screen
+          return Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        final session = supabase.auth.currentSession;
+
+        if (session != null) {
+          return HomeScreen(); // ✅ Logged in
         } else {
-          return LoginScreen(); // User is not logged in, show login screen
+          return LoginScreen(); // ✅ Not logged in
         }
       },
     );

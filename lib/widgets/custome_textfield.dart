@@ -1,3 +1,4 @@
+import 'package:book_store/widgets/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatefulWidget {
@@ -37,7 +38,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       padding: EdgeInsets.symmetric(horizontal: 28),
       child: TextFormField(
         controller: widget.controller,
-        style: widget.textStyle ?? TextStyle(color: Colors.white),
+        style: widget.textStyle ?? TextStyle(color: AppColors.card),
         obscureText: widget.isPassword ? _isObscured : false,
         // Toggle password visibility
         keyboardType: widget.keyboardType,

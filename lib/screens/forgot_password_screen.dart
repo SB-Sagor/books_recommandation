@@ -1,6 +1,6 @@
 import 'package:book_store/widgets/custome_button.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   @override
@@ -14,21 +14,26 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   Future<void> resetPassword() async {
     if (_formKey.currentState!.validate()) {
       try {
-        await FirebaseAuth.instance
-            .sendPasswordResetEmail(email: emailController.text.trim());
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text("Password reset email sent. Check your inbox.")),
+        await Supabase.instance.client.auth.resetPasswordForEmail(
+          emailController.text.trim(),
+          redirectTo: 'https://your-app.com/reset-password',
         );
-        Navigator.pop(
-            context); // Go back to login screen after sending reset email
-      } on FirebaseAuthException catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Password reset email sent. Check your inbox.")),
+        );
+        Navigator.pop(context);
+      } on AuthException catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Error: ${e.message}")),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Unexpected error occurred")),
         );
       }
     }
   }
+
 
   @override
   void dispose() {

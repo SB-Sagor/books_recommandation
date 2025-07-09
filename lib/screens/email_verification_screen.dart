@@ -1,5 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:book_store/screens/home_screen.dart';
 
 class VerifyEmailScreen extends StatefulWidget {
   @override
@@ -7,23 +8,21 @@ class VerifyEmailScreen extends StatefulWidget {
 }
 
 class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
+  final supabase = Supabase.instance.client;
   bool isEmailVerified = false;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> checkEmailVerification() async {
-    User? user = _auth.currentUser;
-    await user?.reload(); // Reload user data
-    if (user != null && user.emailVerified) {
+    await supabase.auth.refreshSession(); // Refresh session to get updated user info
+    final user = supabase.auth.currentUser;
+
+    if (user != null && user.emailConfirmedAt != null) {
       setState(() {
         isEmailVerified = true;
       });
 
-      // Navigate to Home Page if verified
-      Navigator.pushReplacementNamed(context, '/home');
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeScreen()),);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Email not verified yet. Please check your inbox.")),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Email not verified yet. Please check your inbox.")),);
     }
   }
 
@@ -43,7 +42,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
             ),
             SizedBox(height: 10),
             Text(
-              "We have sent an email verification link. Please check your inbox.",
+              "We have sent a verification link to your email.\nPlease check your inbox.",
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.white70, fontSize: 16),
             ),
@@ -54,10 +53,9 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
             ),
             SizedBox(height: 10),
             TextButton(
-              onPressed: () async {
-                await _auth.currentUser?.sendEmailVerification();
+              onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Verification email sent again.")),
+                  SnackBar(content: Text("Please check your inbox. Supabase sends the email automatically.")),
                 );
               },
               child: Text("Resend Verification Email"),

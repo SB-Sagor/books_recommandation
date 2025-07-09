@@ -10,19 +10,19 @@ Widget customButton(String buttonText, onPressed) {
       height: 56.h, // Use ScreenUtil here
       child: ElevatedButton(
         onPressed: onPressed,
-        child: Text(
-          buttonText,
-          style: TextStyle(
-              color: Colors.white, fontSize: 18.sp), // Use ScreenUtil here
-        ),
         style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.deep_orange,
+            backgroundColor: AppColors.primary,
             elevation: 8,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
               topLeft: Radius.circular(40),
               bottomRight: Radius.circular(40),
             ))),
+        child: Text(
+          buttonText,
+          style: TextStyle(
+              color: Colors.white, fontSize: 18.sp), // Use ScreenUtil here
+        ),
       ),
     ),
   );

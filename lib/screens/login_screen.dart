@@ -3,11 +3,10 @@ import 'package:book_store/widgets/custome_button.dart';
 import 'package:book_store/widgets/custome_textfield.dart';
 import 'package:book_store/screens/forgot_password_screen.dart';
 import 'package:book_store/screens/home_screen.dart';
+import 'package:book_store/screens/register_screen.dart';
 
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
-import 'register_screen.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -20,44 +19,41 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Future<void> loginWithEmail() async {
+    final supabase = Supabase.instance.client;
+
     try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
+      final response = await supabase.auth.signInWithPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
 
-      User? user = userCredential.user;
-
-      if (user != null) {
-        if (user.emailVerified) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Login successful!')),
-          );
-
-          // Navigate to home screen
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => HomeScreen()),
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text('Please verify your email before logging in.')),
-          );
-        }
+      if (response.session != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Login successful!')),
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Login failed. Please try again.')),
+        );
       }
-    } on FirebaseAuthException catch (e) {
+    } on AuthException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.message ?? 'Login failed')),
+        SnackBar(content: Text(e.message)),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Unexpected error occurred')),
       );
     }
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {  print("🧱 LoginScreen is building...");
     return Scaffold(
-      // backgroundColor: Colors.black,
       body: Column(
         children: [
           Expanded(
@@ -74,20 +70,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 Positioned(
                   top: 0,
                   left: 20,
-                  child: Image.asset(
-                    'images/light-1.png',
-                    width: 100,
-                    height: 180,
-                  ),
+                  child: Image.asset('images/light-1.png', width: 100, height: 180),
                 ),
                 Positioned(
                   top: 0,
                   left: 20,
-                  child: Image.asset(
-                    'images/light-2.png',
-                    width: 600,
-                    height: 180,
-                  ),
+                  child: Image.asset('images/light-2.png', width: 600, height: 180),
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
@@ -95,22 +83,24 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Container(
                       height: MediaQuery.of(context).size.height * 0.6,
                       decoration: BoxDecoration(
-                          color: AppColors.background,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(80),
-                              topRight: Radius.circular(80))),
+                        color: AppColors.darkCard ,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(80),
+                          topRight: Radius.circular(80),
+                        ),
+                      ),
                       child: Form(
                         key: _formKey,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
                               "Sign In",
                               style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 34,
-                                  fontWeight: FontWeight.bold),
+                                color: AppColors.accent,
+                                fontSize: 34,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             CustomTextFormField(
                               controller: emailController,
@@ -122,8 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 if (value == null || value.isEmpty) {
                                   return "Please enter your email";
                                 }
-                                if (!RegExp(
-                                        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+                                if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
                                     .hasMatch(value)) {
                                   return "Enter a valid email";
                                 }
@@ -150,25 +139,21 @@ class _LoginScreenState extends State<LoginScreen> {
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          ForgotPasswordScreen()),
+                                  MaterialPageRoute(builder: (_) => ForgotPasswordScreen()),
                                 );
                               },
-                              child: Text("Forgot Password?",
-                                  style: TextStyle(color: Colors.deepPurple)),
+                              child: Text("Forgot Password?", style: TextStyle(color: Colors.deepPurple)),
                             ),
                             customButton("Login", () {
                               if (_formKey.currentState!.validate()) {
-                                loginWithEmail(); // Ensure this method is called within a class with context
+                                loginWithEmail();
                               }
                             }),
                             TextButton(
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(
-                                      builder: (context) => RegisterScreen()),
+                                  MaterialPageRoute(builder: (_) => RegisterScreen()),
                                 );
                               },
                               child: Text("Don't have an account? Sign up"),

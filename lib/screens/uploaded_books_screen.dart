@@ -99,7 +99,6 @@ class _UploadedBooksScreenState extends State<UploadedBooksScreen> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -162,7 +161,7 @@ class _UploadedBooksScreenState extends State<UploadedBooksScreen> {
                       ),
                     ),
                     SizedBox(
-                      height: 270,
+                      height: 220,
                       child: ListView.separated(
                         scrollDirection: Axis.horizontal,
                         padding: EdgeInsets.symmetric(horizontal: 12),
@@ -179,6 +178,8 @@ class _UploadedBooksScreenState extends State<UploadedBooksScreen> {
                               Container(
                                 width: 160,
                                 decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 1, color: Colors.black38),
                                   borderRadius: BorderRadius.circular(12),
                                   image: DecorationImage(
                                     image: coverUrl != null
@@ -193,14 +194,6 @@ class _UploadedBooksScreenState extends State<UploadedBooksScreen> {
                                 child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12),
-                                    gradient: LinearGradient(
-                                      begin: Alignment.bottomCenter,
-                                      end: Alignment.topCenter,
-                                      colors: [
-                                        Colors.black.withOpacity(0.85),
-                                        Colors.transparent,
-                                      ],
-                                    ),
                                   ),
                                 ),
                               ),

@@ -154,59 +154,85 @@ class _ReplyScreenState extends State<ReplyScreen> {
         backgroundColor: AppColors.primary,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.all(8),
         child: Column(
           children: myRequests.map((req) {
             final replies = List<Map<String, dynamic>>.from(
                 repliesMap['${req['id']}'] ?? []);
-            return Card(
-              margin: EdgeInsets.symmetric(vertical: 12),
-              elevation: 3,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(req['title'],
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold)),
-                    Text("${req['category']} • ${req['description']}"),
-                    SizedBox(height: 10),
-                    customButton(
-                      "Reply",
-                      () => showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        builder: (_) => Padding(
-                          padding: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).viewInsets.bottom),
-                          child: replyInput(req),
+            return Center(
+              child: Card(
+                margin: EdgeInsets.symmetric(vertical: 8),
+                elevation: 3,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(33),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(req['title'],
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold)),
+                      Text("${req['category']} • ${req['description']}"),
+                      SizedBox(height: 10),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          elevation: 4,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (_) => Padding(
+                              padding: EdgeInsets.only(
+                                bottom:
+                                    MediaQuery.of(context).viewInsets.bottom,
+                                left: 16,
+                                right: 16,
+                                top: 16,
+                              ),
+                              child:
+                                  SingleChildScrollView(child: replyInput(req)),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          "Reply",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                            letterSpacing: 0.8,
+                          ),
                         ),
                       ),
-                    ),
-                    if (replies.isNotEmpty) ...[
-                      Divider(),
-                      Text("💬 Replies",
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      ...replies
-                          .map((r) => ListTile(
-                                title: Text(r['message']),
-                                subtitle: Text(
-                                    "By ${r['profiles']?['name'] ?? 'Unknown'}"),
-                                trailing: r['pdf_url'] != null
-                                    ? IconButton(
-                                        icon: Icon(Icons.picture_as_pdf,
-                                            color: Colors.teal),
-                                        onPressed: () =>
-                                            launchUrl(Uri.parse(r['pdf_url'])),
-                                      )
-                                    : null,
-                              ))
-                          .toList(),
-                    ]
-                  ],
+                      if (replies.isNotEmpty) ...[
+                        Divider(),
+                        Text("💬 Replies",
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        ...replies
+                            .map((r) => ListTile(
+                                  title: Text(r['message']),
+                                  subtitle: Text(
+                                      "By ${r['profiles']?['name'] ?? 'Unknown'}"),
+                                  trailing: r['pdf_url'] != null
+                                      ? IconButton(
+                                          icon: Icon(Icons.picture_as_pdf,
+                                              color: Colors.teal),
+                                          onPressed: () => launchUrl(
+                                              Uri.parse(r['pdf_url'])),
+                                        )
+                                      : null,
+                                ))
+                            .toList(),
+                      ]
+                    ],
+                  ),
                 ),
               ),
             );

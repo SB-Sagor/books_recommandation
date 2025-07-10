@@ -33,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
     "History",
     "Science",
     "Biography"
+        "Programming"
   ];
 
   @override
@@ -143,8 +144,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   MaterialPageRoute(builder: (_) => UploadedBooksScreen()),
                 );
               },
-            ),ListTile(
-              leading: Icon(Icons.read_more_rounded, color: AppColors.textPrimary),
+            ),
+            ListTile(
+              leading:
+                  Icon(Icons.read_more_rounded, color: AppColors.textPrimary),
               title: Text('Book Request',
                   style: TextStyle(
                       color: AppColors.textSecondary,
@@ -185,38 +188,100 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-          // 👤 Authors
+          //author photo
           SizedBox(
-            height: 90,
-            child: ListView.builder(
+            height: 100,
+            child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: filteredBooks.length.clamp(0, 10),
+              separatorBuilder: (_, __) => SizedBox(width: 8),
               itemBuilder: (context, index) {
-                var book = filteredBooks[index]['volumeInfo'];
-                var authorName =
-                    (book['authors'] != null) ? book['authors'][0] : "Unknown";
+                final bookInfo = filteredBooks[index]['volumeInfo'];
+                final authors = bookInfo['authors'] as List<dynamic>? ?? [];
+                final authorName =
+                    authors.isNotEmpty ? authors.first.toString() : "Unknown";
+                final thumbnail = bookInfo['imageLinks']?['thumbnail'];
 
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                return GestureDetector(
+                  onTap: () {
+                    final authorBooks = allBooks.where((book) {
+                      final names =
+                          book['volumeInfo']['authors'] as List<dynamic>? ?? [];
+                      return names.contains(authorName);
+                    }).toList();
+
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (_) => Padding(
+                        padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+                          left: 16,
+                          right: 16,
+                          top: 16,
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Books by $authorName",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 10),
+                            SizedBox(
+                              height: 300,
+                              child: ListView.builder(
+                                itemCount: authorBooks.length,
+                                itemBuilder: (context, i) {
+                                  final info = authorBooks[i]['volumeInfo'];
+                                  final title = info['title'] ?? 'Untitled';
+                                  final image =
+                                      info['imageLinks']?['thumbnail'];
+                                  return ListTile(
+                                    leading: image != null
+                                        ? Image.network(image, width: 40)
+                                        : Icon(Icons.book),
+                                    title: Text(title),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                   child: Column(
                     children: [
                       CircleAvatar(
-                        radius: 25,
-                        backgroundColor: Colors.grey.shade300,
-                        child: Text(
-                          authorName[0].toUpperCase(),
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
+                        radius: 28,
+                        backgroundImage:
+                            thumbnail != null ? NetworkImage(thumbnail) : null,
+                        backgroundColor: Colors.teal.shade100,
+                        child: thumbnail == null
+                            ? Text(
+                                authorName[0].toUpperCase(),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    color: Colors.teal.shade900),
+                              )
+                            : null,
                       ),
-                      SizedBox(height: 4),
-                      Text(
-                        authorName.length > 6
-                            ? authorName.substring(0, 6) + "..."
-                            : authorName,
-                        style: TextStyle(fontSize: 12),
+                      SizedBox(height: 6),
+                      SizedBox(
+                        width: 60,
+                        child: Text(
+                          authorName.length > 10
+                              ? authorName.substring(0, 9) + "…"
+                              : authorName,
+                          style: TextStyle(fontSize: 12),
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          maxLines: 1,
+                        ),
                       ),
                     ],
                   ),

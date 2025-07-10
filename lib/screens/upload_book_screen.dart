@@ -31,6 +31,7 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
     'History',
     'Trending',
     'Popular',
+    "Programming"
   ];
 
   Future<void> pickFile() async {

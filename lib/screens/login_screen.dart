@@ -1,8 +1,8 @@
+import 'package:book_store/screens/bottom_NavigationBar.dart';
 import 'package:book_store/widgets/app_colors.dart';
 import 'package:book_store/widgets/custome_button.dart';
 import 'package:book_store/widgets/custome_textfield.dart';
 import 'package:book_store/screens/forgot_password_screen.dart';
-import 'package:book_store/screens/home_screen.dart';
 import 'package:book_store/screens/register_screen.dart';
 
 import 'package:flutter/material.dart';
@@ -33,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
         );
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
+          MaterialPageRoute(builder: (context) => BottomNavigationbar()),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -52,7 +52,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {  print("🧱 LoginScreen is building...");
+  Widget build(BuildContext context) {
+    print("🧱 LoginScreen is building...");
     return Scaffold(
       body: Column(
         children: [
@@ -70,12 +71,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 Positioned(
                   top: 0,
                   left: 20,
-                  child: Image.asset('images/light-1.png', width: 100, height: 180),
+                  child: Image.asset('images/light-1.png',
+                      width: 100, height: 180),
                 ),
                 Positioned(
                   top: 0,
                   left: 20,
-                  child: Image.asset('images/light-2.png', width: 600, height: 180),
+                  child: Image.asset('images/light-2.png',
+                      width: 600, height: 180),
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
@@ -83,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Container(
                       height: MediaQuery.of(context).size.height * 0.6,
                       decoration: BoxDecoration(
-                        color: AppColors.darkCard ,
+                        color: AppColors.darkCard,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(80),
                           topRight: Radius.circular(80),
@@ -112,7 +115,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 if (value == null || value.isEmpty) {
                                   return "Please enter your email";
                                 }
-                                if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+                                if (!RegExp(
+                                        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
                                     .hasMatch(value)) {
                                   return "Enter a valid email";
                                 }
@@ -139,10 +143,12 @@ class _LoginScreenState extends State<LoginScreen> {
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (_) => ForgotPasswordScreen()),
+                                  MaterialPageRoute(
+                                      builder: (_) => ForgotPasswordScreen()),
                                 );
                               },
-                              child: Text("Forgot Password?", style: TextStyle(color: Colors.deepPurple)),
+                              child: Text("Forgot Password?",
+                                  style: TextStyle(color: Colors.deepPurple)),
                             ),
                             customButton("Login", () {
                               if (_formKey.currentState!.validate()) {
@@ -153,7 +159,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (_) => RegisterScreen()),
+                                  MaterialPageRoute(
+                                      builder: (_) => RegisterScreen()),
                                 );
                               },
                               child: Text("Don't have an account? Sign up"),

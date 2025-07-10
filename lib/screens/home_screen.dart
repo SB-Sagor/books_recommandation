@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:book_store/screens/request_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -22,7 +23,8 @@ class _HomeScreenState extends State<HomeScreen> {
   String selectedCategory = "Trending";
   Timer? _debounce;
 
-  final String apiKey = 'AIzaSyD83nD_YintO_BE2RpKFZ5Qnq6qm8qTwdk'; // Replace with your API key
+  final String apiKey =
+      'AIzaSyD83nD_YintO_BE2RpKFZ5Qnq6qm8qTwdk'; // Replace with your API key
 
   final List<String> categories = [
     "Trending",
@@ -52,7 +54,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     setState(() => isLoading = true);
 
-    final url = 'https://www.googleapis.com/books/v1/volumes?q=$query&key=$apiKey';
+    final url =
+        'https://www.googleapis.com/books/v1/volumes?q=$query&key=$apiKey';
 
     try {
       final response = await http.get(Uri.parse(url));
@@ -140,6 +143,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   MaterialPageRoute(builder: (_) => UploadedBooksScreen()),
                 );
               },
+            ),ListTile(
+              leading: Icon(Icons.read_more_rounded, color: AppColors.textPrimary),
+              title: Text('Book Request',
+                  style: TextStyle(
+                      color: AppColors.textSecondary,
+                      fontWeight: FontWeight.bold)),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => RequestBookScreen()),
+                );
+              },
             ),
             Spacer(),
             Divider(color: Colors.white24),
@@ -178,9 +193,8 @@ class _HomeScreenState extends State<HomeScreen> {
               itemCount: filteredBooks.length.clamp(0, 10),
               itemBuilder: (context, index) {
                 var book = filteredBooks[index]['volumeInfo'];
-                var authorName = (book['authors'] != null)
-                    ? book['authors'][0]
-                    : "Unknown";
+                var authorName =
+                    (book['authors'] != null) ? book['authors'][0] : "Unknown";
 
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -228,9 +242,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     selectedColor: Colors.black,
                     backgroundColor: Colors.grey.shade200,
                     labelStyle: TextStyle(
-                      color: selectedCategory == cat
-                          ? Colors.white
-                          : Colors.black,
+                      color:
+                          selectedCategory == cat ? Colors.white : Colors.black,
                     ),
                   ),
                 );
@@ -242,54 +255,54 @@ class _HomeScreenState extends State<HomeScreen> {
           isLoading
               ? Expanded(child: Center(child: CircularProgressIndicator()))
               : Expanded(
-            child: ListView.builder(
-              itemCount: filteredBooks.length,
-              itemBuilder: (context, index) {
-                var book = filteredBooks[index]['volumeInfo'];
-                var title = book['title'] ?? "No Title";
-                var authors = (book['authors'] ?? ["Unknown"]).join(', ');
-                var imageUrl = book['imageLinks']?['thumbnail'] ??
-                    "https://via.placeholder.com/100";
-                var description = book['description'] ?? "No description";
-                var previewLink = book['previewLink'] ?? '';
-                var pdfUrl = filteredBooks[index]['accessInfo']?['pdf']
-                ?['downloadLink'] ??
-                    '';
+                  child: ListView.builder(
+                    itemCount: filteredBooks.length,
+                    itemBuilder: (context, index) {
+                      var book = filteredBooks[index]['volumeInfo'];
+                      var title = book['title'] ?? "No Title";
+                      var authors = (book['authors'] ?? ["Unknown"]).join(', ');
+                      var imageUrl = book['imageLinks']?['thumbnail'] ??
+                          "https://via.placeholder.com/100";
+                      var description = book['description'] ?? "No description";
+                      var previewLink = book['previewLink'] ?? '';
+                      var pdfUrl = filteredBooks[index]['accessInfo']?['pdf']
+                              ?['downloadLink'] ??
+                          '';
 
-                return ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: NetworkImage(imageUrl),
-                  ),
-                  title: Text(title),
-                  subtitle: Text(authors),
-                  onTap: () {
-                    if (pdfUrl.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                            content:
-                            Text("No PDF available for this book")),
-                      );
-                      return;
-                    }
-
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => BookDetailScreen(
-                          title: title,
-                          author: authors,
-                          description: description,
-                          imageUrl: imageUrl,
-                          previewLink: previewLink,
-                          pdfUrl: pdfUrl,
+                      return ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage: NetworkImage(imageUrl),
                         ),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-          ),
+                        title: Text(title),
+                        subtitle: Text(authors),
+                        onTap: () {
+                          if (pdfUrl.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content:
+                                      Text("No PDF available for this book")),
+                            );
+                            return;
+                          }
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => BookDetailScreen(
+                                title: title,
+                                author: authors,
+                                description: description,
+                                imageUrl: imageUrl,
+                                previewLink: previewLink,
+                                pdfUrl: pdfUrl,
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ),
         ],
       ),
     );

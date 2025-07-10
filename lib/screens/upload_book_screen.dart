@@ -119,7 +119,8 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
       });
       await Future.delayed(Duration(milliseconds: 300));
 
-      await Future.delayed(Duration(milliseconds: 300)); // optional delay for smoothness
+      await Future.delayed(
+          Duration(milliseconds: 300)); // optional delay for smoothness
 
       Navigator.pushReplacement(
         context,
@@ -171,52 +172,27 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
               ),
               SizedBox(height: 24.h),
 // Title Field
-              Card(
-                elevation: 2,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4),
-                  child: TextFormField(
-                    controller: titleController,
-                    decoration: InputDecoration(
-                      labelText: "Book Title",
-                      hintText: "e.g. The Alchemist",
-                      prefixIcon: Icon(Icons.title, color: Colors.teal),
-                      border: InputBorder.none,
-                    ),
-                    style: TextStyle(fontSize: 16, color: Colors.black87),
-                    validator: (value) => value == null || value.isEmpty
-                        ? "Title is required"
-                        : null,
-                  ),
-                ),
+              CustomTextFormField(
+                controller: titleController,
+                labelText: "Book Title",
+                hintText: "e.g. The Alchemist",
+                icon: Icons.title,
+                keyboardType: TextInputType.text,
+                validator: (value) =>
+                    value == null || value.isEmpty ? "Title is required" : null,
               ),
-              SizedBox(height: 16),
+              SizedBox(height: 16.h),
 
 // Author Field
-              Card(
-                elevation: 2,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4),
-                  child: TextFormField(
-                    controller: authorController,
-                    decoration: InputDecoration(
-                      labelText: "Author Name",
-                      hintText: "e.g. Paulo Coelho",
-                      prefixIcon: Icon(Icons.person, color: Colors.teal),
-                      border: InputBorder.none,
-                    ),
-                    style: TextStyle(fontSize: 16, color: Colors.black87),
-                    validator: (value) => value == null || value.isEmpty
-                        ? "Author is required"
-                        : null,
-                  ),
-                ),
+              CustomTextFormField(
+                controller: authorController,
+                labelText: "Author Name",
+                hintText: "e.g. Paulo Coelho",
+                icon: Icons.person,
+                keyboardType: TextInputType.text,
+                validator: (value) => value == null || value.isEmpty
+                    ? "Author is required"
+                    : null,
               ),
 
               SizedBox(height: 16.h),

@@ -1,4 +1,4 @@
-import 'package:book_store/screens/home_screen.dart';
+import 'package:book_store/screens/bottom_NavigationBar.dart';
 import 'package:book_store/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -21,7 +21,7 @@ class AuthCheck extends StatelessWidget {
         final session = supabase.auth.currentSession;
 
         if (session != null) {
-          return HomeScreen(); // ✅ Logged in
+          return BottomNavigationbar(); // ✅ Logged in
         } else {
           return LoginScreen(); // ✅ Not logged in
         }

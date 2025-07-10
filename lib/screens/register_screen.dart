@@ -92,7 +92,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           topRight: Radius.circular(80),
                         ),
                       ),
-<<<<<<< HEAD
                       child: Padding(
                         padding: const EdgeInsets.all(12),
                         child: Form(
@@ -178,90 +177,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                             ],
                           ),
-=======
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Sign Up",
-                              style: TextStyle(
-                                color: AppColors.accent,
-                                fontSize: 34,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 16),
-                            CustomTextFormField(
-                              controller: emailController,
-                              labelText: "Email",
-                              hintText: "Enter your email",
-                              keyboardType: TextInputType.emailAddress,
-                              icon: Icons.email,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "Please enter your email";
-                                }
-                                if (!RegExp(r'^[\w-.]+@([\w-]+\.)+[\w]{2,4}$')
-                                    .hasMatch(value)) {
-                                  return "Enter a valid email";
-                                }
-                                return null;
-                              },
-                              autofillHints: [AutofillHints.email],
-                            ),
-                            SizedBox(height: 16),
-                            CustomTextFormField(
-                              controller: passwordController,
-                              hintText: "Enter your password",
-                              labelText: "Password",
-                              isPassword: true,
-                              keyboardType: TextInputType.text,
-                              icon: Icons.lock,
-                              validator: (value) {
-                                if (value == null || value.length < 6) {
-                                  return "Password must be at least 6 characters";
-                                }
-                                return null;
-                              },
-                            ),
-                            SizedBox(height: 16),
-                            CustomTextFormField(
-                              controller: confirmPasswordController,
-                              hintText: "Confirm your password",
-                              labelText: "Confirm Password",
-                              isPassword: true,
-                              keyboardType: TextInputType.text,
-                              icon: Icons.lock_outline,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "Please confirm your password";
-                                }
-                                if (value != passwordController.text) {
-                                  return "Passwords do not match";
-                                }
-                                return null;
-                              },
-                            ),
-                            SizedBox(height: 24),
-                            customButton("Register", () {
-                              if (_formKey.currentState!.validate()) {
-                                signUpWithEmail(context);
-                              }
-                            }),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => LoginScreen()),
-                                );
-                              },
-                              child: Text("Already have an account? Sign in"),
-                            ),
-                          ],
->>>>>>> 223e400a9fed6310856748d60103d4e3d98e3524
                         ),
                       ),
                     ),

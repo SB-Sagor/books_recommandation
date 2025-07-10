@@ -1,0 +1,108 @@
+import 'package:book_store/widgets/custome_button.dart';
+import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+class ForgotPasswordScreen extends StatefulWidget {
+  @override
+  _ForgotPasswordScreenState createState() => _ForgotPasswordScreenState();
+}
+
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  Future<void> resetPassword() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        await Supabase.instance.client.auth.resetPasswordForEmail(
+          emailController.text.trim(),
+          redirectTo: 'https://your-app.com/reset-password',
+        );
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Password reset email sent. Check your inbox.")),
+        );
+        Navigator.pop(context);
+      } on AuthException catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error: ${e.message}")),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Unexpected error occurred")),
+        );
+      }
+    }
+  }
+
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: Text(
+          "Forget Password",
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.black,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Enter your email to receive a password reset link",
+                style: TextStyle(color: Colors.white, fontSize: 18),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 20),
+              TextFormField(
+                controller: emailController,
+                keyboardType: TextInputType.emailAddress,
+                style: TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  labelText: "Email",
+                  hintText: "Enter your email",
+                  labelStyle: TextStyle(color: Colors.white),
+                  prefixIcon: Icon(Icons.email, color: Colors.white),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green),
+                  ),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter your email";
+                  }
+                  if (!RegExp(
+                          r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+                      .hasMatch(value)) {
+                    return "Enter a valid email";
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 20),
+              customButton("Send Reset Link", () {
+                if (_formKey.currentState!.validate()) {
+                  resetPassword();
+                }
+              }),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

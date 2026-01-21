@@ -1,0 +1,31 @@
+class FavoriteScreen extends StatelessWidget {
+  final List<dynamic> favoriteBooks;
+  FavoriteScreen({required this.favoriteBooks});
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 0.7,
+      ),
+      itemCount: favoriteBooks.length,
+      itemBuilder: (context, index) {
+        var book = favoriteBooks[index];
+        var imageUrl = book['imageLinks']?['thumbnail'];
+        return Card(
+          child: Column(
+            children: [
+              Expanded(
+                child: imageUrl != null
+                  ? Image.network(imageUrl, fit: BoxFit.cover)
+                  : Icon(Icons.book, size: 60, color: Colors.grey),
+              ),
+              Text(book['title'] ?? "No Title"),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}

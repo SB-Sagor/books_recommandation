@@ -29,15 +29,23 @@ class UploadBookFirestore extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Upload Book (Firestore)")),
+      appBar: AppBar(title: Text("Upload Book")),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
           children: [
-            TextField(controller: nameController, decoration: InputDecoration(labelText: "Book Name")),
-            TextField(controller: authorController, decoration: InputDecoration(labelText: "Author Name")),
-            TextField(controller: descriptionController, decoration: InputDecoration(labelText: "Description")),
-            TextField(controller: pdfUrlController, decoration: InputDecoration(labelText: "PDF URL")),
+            TextField(
+                controller: nameController,
+                decoration: InputDecoration(labelText: "Book Name")),
+            TextField(
+                controller: authorController,
+                decoration: InputDecoration(labelText: "Author Name")),
+            TextField(
+                controller: descriptionController,
+                decoration: InputDecoration(labelText: "Description")),
+            TextField(
+                controller: pdfUrlController,
+                decoration: InputDecoration(labelText: "PDF URL")),
             SizedBox(height: 10),
             ElevatedButton(onPressed: uploadBook, child: Text("Upload Book")),
           ],

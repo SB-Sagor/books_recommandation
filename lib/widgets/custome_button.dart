@@ -16,7 +16,7 @@ Widget customButton(String buttonText, onPressed) {
               color: Colors.white, fontSize: 18.sp), // Use ScreenUtil here
         ),
         style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.deep_orange,
+            backgroundColor: AppColors.primary,
             elevation: 8,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(

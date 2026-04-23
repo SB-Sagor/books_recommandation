@@ -1,6 +1,7 @@
 # book_store
 A new Flutter project.
-<tr><td><img width="225" height="400" alt="WhatsApp Image 2026-04-24 at 12 17 20 AM" src="https://github.com/user-attachments/assets/33accf5a-7cb0-4abf-aff1-0ecd127e4505" /></td>
+<tr>
+  <td><img width="225" height="400" alt="WhatsApp Image 2026-04-24 at 12 17 20 AM" src="https://github.com/user-attachments/assets/33accf5a-7cb0-4abf-aff1-0ecd127e4505" /></td>
 <td><img width="225" height="400" alt="WhatsApp Image 2026-04-24 at 12 17 20 AM (1)" src="https://github.com/user-attachments/assets/b8221264-c92b-47ac-ae37-1ccc0009e498" /></td>
 </tr>
 

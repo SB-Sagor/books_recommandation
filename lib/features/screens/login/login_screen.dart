@@ -1,13 +1,17 @@
-import 'package:book_store/widgets/app_colors.dart';
-import 'package:book_store/widgets/custome_button.dart';
-import 'package:book_store/widgets/custome_textfield.dart';
-import 'package:book_store/screens/forgot_password_screen.dart';
-import 'package:book_store/screens/home_screen.dart';
+import 'package:book_store/common/widgets/buttons/elevated_text_button.dart';
+import 'package:book_store/common/widgets/login_signup/login_image.dart';
+import 'package:book_store/features/screens/forget_password/forget_password.dart';
+import 'package:book_store/utils/constants/color.dart';
+import 'package:book_store/utils/constants/images.dart';
+import 'package:book_store/utils/helpers/helper_functions.dart';
+import 'package:book_store/common/widgets/buttons/custome_button.dart';
+import 'package:book_store/common/widgets/textfields/custome_textfield.dart';
+import 'package:book_store/features/shop/screens/home/home_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'register_screen.dart';
+import '../signup/register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -56,38 +60,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool dark = UHelperFunctions.isDarkMode(context);
     return Scaffold(
-      // backgroundColor: Colors.black,
       body: Column(
         children: [
           Expanded(
             child: Stack(
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('images/loginPage.png'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 0,
-                  left: 20,
-                  child: Image.asset(
-                    'images/light-1.png',
-                    width: 100,
-                    height: 180,
-                  ),
-                ),
-                Positioned(
-                  top: 0,
-                  left: 20,
-                  child: Image.asset(
-                    'images/light-2.png',
-                    width: 600,
-                    height: 180,
-                  ),
+                ULoginImage(
+                  image: UImages.loginPage,
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
@@ -95,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Container(
                       height: MediaQuery.of(context).size.height * 0.6,
                       decoration: BoxDecoration(
-                          color: AppColors.background,
+                          color: dark ? UColors.primary : UColors.secondary,
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(80),
                               topRight: Radius.circular(80))),
@@ -111,6 +92,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   color: Colors.white,
                                   fontSize: 34,
                                   fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 8,
                             ),
                             CustomTextFormField(
                               controller: emailController,
@@ -156,14 +140,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                 );
                               },
                               child: Text("Forgot Password?",
-                                  style: TextStyle(color: Colors.deepPurple)),
+                                  style: TextStyle(
+                                      color: dark
+                                          ? UColors.dark
+                                          : UColors.success)),
                             ),
                             customButton("Login", () {
                               if (_formKey.currentState!.validate()) {
                                 loginWithEmail(); // Ensure this method is called within a class with context
                               }
                             }),
-                            TextButton(
+                            UElevatedTextButton(
                               onPressed: () {
                                 Navigator.push(
                                   context,
@@ -171,7 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       builder: (context) => RegisterScreen()),
                                 );
                               },
-                              child: Text("Don't have an account? Sign up"),
+                              text: "Don't have an account? Sign up",
                             ),
                           ],
                         ),

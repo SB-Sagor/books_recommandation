@@ -1,6 +1,6 @@
+import 'package:book_store/utils/constants/color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'app_colors.dart';
 
 Widget customButton(String buttonText, onPressed) {
   return Padding(
@@ -16,7 +16,7 @@ Widget customButton(String buttonText, onPressed) {
               color: Colors.white, fontSize: 18.sp), // Use ScreenUtil here
         ),
         style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primary,
+            backgroundColor: UColors.accent,
             elevation: 8,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(

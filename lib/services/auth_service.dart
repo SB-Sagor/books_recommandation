@@ -1,5 +1,6 @@
-import 'package:book_store/screens/home_screen.dart';
-import 'package:book_store/screens/login_screen.dart';
+import 'package:book_store/features/shop/screens/home/home_screen.dart';
+import 'package:book_store/features/screens/login/login_screen.dart';
+import 'package:book_store/nevigation_menu.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -10,11 +11,15 @@ class AuthCheck extends StatelessWidget {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator()); // Show a loading indicator while checking auth status
+          return Center(
+              child:
+                  CircularProgressIndicator()); // Show a loading indicator while checking auth status
         } else if (snapshot.hasError) {
-          return Center(child: Text('Something went wrong: ${snapshot.error}')); // Display the error message
+          return Center(
+              child: Text(
+                  'Something went wrong: ${snapshot.error}')); // Display the error message
         } else if (snapshot.hasData) {
-          return HomeScreen(); // User is logged in, show home screen
+          return NevigationMenu(); // User is logged in, show home screen
         } else {
           return LoginScreen(); // User is not logged in, show login screen
         }

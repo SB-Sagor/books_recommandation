@@ -1,8 +1,12 @@
-import 'package:book_store/widgets/app_colors.dart';
-import 'package:book_store/widgets/custome_button.dart';
-import 'package:book_store/widgets/custome_textfield.dart';
-import 'package:book_store/screens/email_verification_screen.dart';
-import 'package:book_store/screens/login_screen.dart';
+import 'package:book_store/common/widgets/buttons/elevated_text_button.dart';
+import 'package:book_store/common/widgets/login_signup/login_image.dart';
+import 'package:book_store/features/screens/verify_email/verify_email.dart';
+import 'package:book_store/utils/constants/color.dart';
+import 'package:book_store/utils/constants/images.dart';
+import 'package:book_store/utils/helpers/helper_functions.dart';
+import 'package:book_store/common/widgets/buttons/custome_button.dart';
+import 'package:book_store/common/widgets/textfields/custome_textfield.dart';
+import 'package:book_store/features/screens/login/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -70,6 +74,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool dark = UHelperFunctions.isDarkMode(context);
     return Scaffold(
       backgroundColor: Colors.black,
       body: Column(
@@ -77,39 +82,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
           Expanded(
             child: Stack(
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('images/signUp.png'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 0,
-                  left: 20,
-                  child: Image.asset(
-                    'images/light-1.png',
-                    width: 100,
-                    height: 180,
-                  ),
-                ),
-                Positioned(
-                  top: 0,
-                  left: 20,
-                  child: Image.asset(
-                    'images/light-2.png',
-                    width: 600,
-                    height: 180,
-                  ),
-                ),
+                ULoginImage(image: UImages.signUpPage),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: SingleChildScrollView(
                     child: Container(
                       height: MediaQuery.of(context).size.height * 0.6,
                       decoration: BoxDecoration(
-                          color: AppColors.background,
+                          color: dark ? UColors.primary : UColors.secondary,
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(80),
                               topRight: Radius.circular(80))),
@@ -185,14 +165,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 signUpWithEmail(context);
                               }
                             }),
-                            TextButton(
+                            UElevatedTextButton(
                               onPressed: () {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => LoginScreen()));
                               },
-                              child: Text("Already have an account? Sign in"),
+                              text: "Already have an account? Sign in",
                             ),
                           ],
                         ),

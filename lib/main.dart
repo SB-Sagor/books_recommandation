@@ -1,5 +1,5 @@
 import 'package:book_store/firebase_options.dart';
-import 'package:book_store/nevigation_menu.dart';
+import 'package:book_store/navigation_menu.dart';
 import 'package:book_store/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';

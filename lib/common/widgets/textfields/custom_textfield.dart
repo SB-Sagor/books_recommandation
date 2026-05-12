@@ -1,3 +1,5 @@
+import 'package:book_store/utils/constants/color.dart';
+import 'package:book_store/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatefulWidget {
@@ -29,17 +31,18 @@ class CustomTextFormField extends StatefulWidget {
 }
 
 class _CustomTextFormFieldState extends State<CustomTextFormField> {
-  bool _isObscured = true; // Password visibility state
+  bool _isObscured = true;
 
   @override
   Widget build(BuildContext context) {
+    bool dark = UHelperFunctions.isDarkMode(context);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 28),
       child: TextFormField(
         controller: widget.controller,
-        style: widget.textStyle ?? TextStyle(color: Colors.white),
+        style: widget.textStyle ??
+            TextStyle(color: dark ? UColors.dark : UColors.light),
         obscureText: widget.isPassword ? _isObscured : false,
-        // Toggle password visibility
         keyboardType: widget.keyboardType,
         validator: widget.validator,
         autofillHints: widget.autofillHints,
@@ -50,15 +53,13 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-
-          // Password Visibility Toggle Button
           suffixIcon: widget.isPassword
               ? IconButton(
                   icon: Icon(
                       _isObscured ? Icons.visibility_off : Icons.visibility),
                   onPressed: () {
                     setState(() {
-                      _isObscured = !_isObscured; //  Toggle state
+                      _isObscured = !_isObscured;
                     });
                   },
                 )

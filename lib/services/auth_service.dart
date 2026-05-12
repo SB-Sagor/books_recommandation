@@ -1,6 +1,6 @@
 import 'package:book_store/features/shop/screens/home/home_screen.dart';
 import 'package:book_store/features/screens/login/login_screen.dart';
-import 'package:book_store/nevigation_menu.dart';
+import 'package:book_store/navigation_menu.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +19,7 @@ class AuthCheck extends StatelessWidget {
               child: Text(
                   'Something went wrong: ${snapshot.error}')); // Display the error message
         } else if (snapshot.hasData) {
-          return NevigationMenu(); // User is logged in, show home screen
+          return NavigationMenu(); // User is logged in, show home screen
         } else {
           return LoginScreen(); // User is not logged in, show login screen
         }

@@ -3,11 +3,11 @@ import 'package:book_store/controller/home_helper.dart';
 import 'package:book_store/features/screens/login/login_screen.dart';
 import 'package:book_store/services/book_service.dart';
 import 'package:book_store/utils/constants/color.dart';
+import 'package:book_store/utils/helpers/helper_functions.dart';
 import 'package:book_store/widgets/book_card.dart';
 import 'package:flutter/material.dart';
 
 // Import local files (Ensure paths are correct)
-
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,7 +19,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final BookService _bookService = BookService();
   final TextEditingController searchController = TextEditingController();
-  
+
   List<dynamic> recommendedBooks = [];
   Map<String, List<dynamic>> cachedCategories = {};
   Map<String, List<dynamic>> bookCache = {};
@@ -34,7 +34,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _loadInitialData() {
-    final categories = ["Programming", "Science", "History", "Biography", "Trending"];
+    final categories = [
+      "Programming",
+      "Science",
+      "History",
+      "Biography",
+      "Trending"
+    ];
     for (var cat in categories) {
       _preloadCategory(cat);
     }
@@ -78,9 +84,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool dark = UHelperFunctions.isDarkMode(context);
     return Scaffold(
+      backgroundColor: dark ? UColors.white : UColors.dark,
       appBar: AppBar(
-        title: const Text("Book Recommended", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        title: const Text("Book Recommended",
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         backgroundColor: UColors.primary,
       ),
       drawer: _buildDrawer(),
@@ -90,7 +99,9 @@ class _HomeScreenState extends State<HomeScreen> {
           Expanded(
             child: isLoading
                 ? const Center(child: CircularProgressIndicator())
-                : (searchController.text.isEmpty ? _buildCategoryView() : _buildSearchResults()),
+                : (searchController.text.isEmpty
+                    ? _buildCategoryView()
+                    : _buildSearchResults()),
           )
         ],
       ),
@@ -120,7 +131,9 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Text(entry.key, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              child: Text(entry.key,
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold)),
             ),
             SizedBox(
               height: 220,
@@ -142,14 +155,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildSearchResults() {
-    if (recommendedBooks.isEmpty) return const Center(child: Text("No recommendations found"));
+    if (recommendedBooks.isEmpty)
+      return const Center(child: Text("No recommendations found"));
     return ListView.builder(
       itemCount: recommendedBooks.length,
       itemBuilder: (context, index) {
         final book = recommendedBooks[index]['volumeInfo'];
         return ListTile(
           leading: book['imageLinks']?['thumbnail'] != null
-              ? Image.network(book['imageLinks']['thumbnail'], width: 50, fit: BoxFit.cover)
+              ? Image.network(book['imageLinks']['thumbnail'],
+                  width: 50, fit: BoxFit.cover)
               : const Icon(Icons.book, size: 40),
           title: Text(book['title'] ?? "No Title"),
           subtitle: Text(book['authors']?.join(', ') ?? "Unknown Author"),
@@ -166,10 +181,17 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           const DrawerHeader(
             decoration: BoxDecoration(color: UColors.primary),
-            child: Text("Book Store", style: TextStyle(color: Colors.black, fontSize: 24)),
+            child: Text("Book Store",
+                style: TextStyle(color: Colors.black, fontSize: 24)),
           ),
-          ListTile(leading: const Icon(Icons.person), title: const Text("Users"), onTap: () {}),
-          ListTile(leading: const Icon(Icons.upload_file), title: const Text("Upload Books"), onTap: () {}),
+          ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text("Users"),
+              onTap: () {}),
+          ListTile(
+              leading: const Icon(Icons.upload_file),
+              title: const Text("Upload Books"),
+              onTap: () {}),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.red),

@@ -4,8 +4,8 @@ import 'package:book_store/features/screens/forget_password/forget_password.dart
 import 'package:book_store/utils/constants/color.dart';
 import 'package:book_store/utils/constants/images.dart';
 import 'package:book_store/utils/helpers/helper_functions.dart';
-import 'package:book_store/common/widgets/buttons/custome_button.dart';
-import 'package:book_store/common/widgets/textfields/custome_textfield.dart';
+import 'package:book_store/common/widgets/buttons/custom_button.dart';
+import 'package:book_store/common/widgets/textfields/custom_textfield.dart';
 import 'package:book_store/features/shop/screens/home/home_screen.dart';
 
 import 'package:flutter/material.dart';

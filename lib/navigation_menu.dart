@@ -3,6 +3,7 @@ import 'package:book_store/features/screens/signup/register_screen.dart';
 import 'package:book_store/features/shop/screens/home/home_screen.dart';
 import 'package:book_store/features/shop/screens/home/reply.dart';
 import 'package:book_store/features/shop/screens/home/request.dart';
+import 'package:book_store/features/shop/screens/home/profile/user.dart';
 import 'package:book_store/utils/constants/color.dart';
 import 'package:book_store/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
@@ -20,14 +21,40 @@ class NavigationMenu extends StatelessWidget {
     return Scaffold(
       body: controller.screens[controller.selectedIndex],
       bottomNavigationBar: NavigationBar(
-          backgroundColor: dark ? UColors.light : UColors.dark,
+          elevation: 0,
+          backgroundColor: dark ? UColors.primary : UColors.secondary,
+          indicatorColor: dark
+              ? UColors.secondary.withValues(alpha: 0.6)
+              : UColors.primary.withValues(alpha: 0.6),
           selectedIndex: controller.selectedIndex,
           onDestinationSelected: controller.updateIndex,
           destinations: [
-            NavigationDestination(icon: Icon(Iconsax.home), label: 'Home'),
-            NavigationDestination(icon: Icon(Iconsax.repeat), label: 'Reply'),
-            NavigationDestination(icon: Icon(Iconsax.send), label: 'Request'),
-            NavigationDestination(icon: Icon(Iconsax.user), label: 'Profile'),
+            NavigationDestination(
+                icon: Icon(
+                  Iconsax.home,
+                  color: UColors.accent,
+                ),
+                label: 'Home'),
+            NavigationDestination(
+              icon: Icon(
+                Iconsax.repeat,
+                color: UColors.accent,
+              ),
+              label: 'Reply',
+            ),
+            NavigationDestination(
+                icon: Icon(
+                  Iconsax.send,
+                  color: UColors.accent,
+                ),
+                label: 'Request'),
+            NavigationDestination(
+              icon: Icon(
+                Iconsax.user,
+                color: UColors.accent,
+              ),
+              label: 'Profile',
+            ),
           ]),
     );
   }
@@ -39,7 +66,7 @@ class NavigationController with ChangeNotifier {
     HomeScreen(),
     ReplyBookScreen(),
     RequestBookScreen(),
-    HomeScreen()
+    UserScreen(),
   ];
   void updateIndex(int index) {
     selectedIndex = index;

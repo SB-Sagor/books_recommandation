@@ -17,8 +17,11 @@ class ReplyBookScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: dark ? UColors.light : UColors.dark,
       appBar: AppBar(
-        title: const Text("Replies"),
-        backgroundColor: UColors.primary,
+        title: Text(
+          "Replies",
+          style: TextStyle(color: dark ? UColors.dark : UColors.light),
+        ),
+        backgroundColor: dark ? UColors.primary : UColors.secondary,
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance

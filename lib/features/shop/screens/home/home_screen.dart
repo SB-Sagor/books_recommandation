@@ -7,8 +7,6 @@ import 'package:book_store/utils/helpers/helper_functions.dart';
 import 'package:book_store/widgets/book_card.dart';
 import 'package:flutter/material.dart';
 
-// Import local files (Ensure paths are correct)
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -88,11 +86,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: dark ? UColors.white : UColors.dark,
       appBar: AppBar(
-        title: const Text("Book Recommended",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-        backgroundColor: UColors.primary,
+        title: Text("Book Recommended",
+            style: TextStyle(
+                color: dark ? UColors.dark : UColors.light,
+                fontWeight: FontWeight.bold)),
+        backgroundColor: dark ? UColors.primary : UColors.secondary,
       ),
-      drawer: _buildDrawer(),
       body: Column(
         children: [
           _buildSearchBar(),
@@ -109,12 +108,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildSearchBar() {
+    bool dark = UHelperFunctions.isDarkMode(context);
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: TextField(
+        style: TextStyle(color: dark ? UColors.secondary : UColors.primary),
         controller: searchController,
         decoration: InputDecoration(
           labelText: "Search Books",
+          labelStyle: TextStyle(color: dark ? UColors.accent : UColors.accent),
           hintText: "Enter book name...",
           prefixIcon: const Icon(Icons.search),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(22.0)),
@@ -124,6 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildCategoryView() {
+    bool dark = UHelperFunctions.isDarkMode(context);
     return ListView(
       children: cachedCategories.entries.map((entry) {
         return Column(
@@ -132,8 +135,10 @@ class _HomeScreenState extends State<HomeScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Text(entry.key,
-                  style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold)),
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: dark ? UColors.secondary : UColors.primary)),
             ),
             SizedBox(
               height: 220,
@@ -155,8 +160,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildSearchResults() {
-    if (recommendedBooks.isEmpty)
-      return const Center(child: Text("No recommendations found"));
+    bool dark = UHelperFunctions.isDarkMode(context);
+    if (recommendedBooks.isEmpty) {
+      return Center(
+          child: Text(
+        "No recommendations found",
+        style: TextStyle(color: dark ? UColors.primary : UColors.secondary),
+      ));
+    }
     return ListView.builder(
       itemCount: recommendedBooks.length,
       itemBuilder: (context, index) {
@@ -171,35 +182,6 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: () => HomeHelper.openBook(recommendedBooks[index], context),
         );
       },
-    );
-  }
-
-  Widget _buildDrawer() {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          const DrawerHeader(
-            decoration: BoxDecoration(color: UColors.primary),
-            child: Text("Book Store",
-                style: TextStyle(color: Colors.black, fontSize: 24)),
-          ),
-          ListTile(
-              leading: const Icon(Icons.person),
-              title: const Text("Users"),
-              onTap: () {}),
-          ListTile(
-              leading: const Icon(Icons.upload_file),
-              title: const Text("Upload Books"),
-              onTap: () {}),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.logout, color: Colors.red),
-            title: const Text("Logout", style: TextStyle(color: Colors.red)),
-            onTap: () => HomeHelper.logout(context, LoginScreen()),
-          ),
-        ],
-      ),
     );
   }
 }

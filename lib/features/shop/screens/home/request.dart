@@ -90,8 +90,9 @@ class _RequestBookScreenState extends State<RequestBookScreen> {
       backgroundColor: dark ? UColors.light : UColors.dark,
       appBar: AppBar(
         title: Text("Submit Book Request",
-            style: TextStyle(color: UColors.textPrimary, fontSize: 18.sp)),
-        backgroundColor: UColors.primary,
+            style: TextStyle(
+                color: dark ? UColors.dark : UColors.light, fontSize: 18.sp)),
+        backgroundColor: dark ? UColors.primary : UColors.secondary,
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),

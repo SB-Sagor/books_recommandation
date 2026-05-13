@@ -7,7 +7,7 @@ class UColors{
 
 // App theme colors
   static const Color primary = Color(0xfff8f4e8);
-  static const Color secondary = Colors.black;
+  static const Color secondary = Color(0xFF333333);
   static const Color accent = Color(0xFFb0c7ff);
 
   // Text colors

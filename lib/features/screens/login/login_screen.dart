@@ -11,6 +11,7 @@ import 'package:book_store/features/shop/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../../navigation_menu.dart';
 import '../signup/register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -42,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
           // Navigate to home screen
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => HomeScreen()),
+            MaterialPageRoute(builder: (context) => NavigationMenu()),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(

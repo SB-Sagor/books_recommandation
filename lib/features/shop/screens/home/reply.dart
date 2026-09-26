@@ -15,11 +15,11 @@ class ReplyBookScreen extends StatelessWidget {
     bool dark = UHelperFunctions.isDarkMode(context);
 
     return Scaffold(
-      backgroundColor: dark ? UColors.light : UColors.dark,
+      backgroundColor: dark ? UColors.primary : UColors.secondary,
       appBar: AppBar(
         title: Text(
           "Replies",
-          style: TextStyle(color: dark ? UColors.dark : UColors.light),
+          style: TextStyle(color: dark ? UColors.textSecondary : UColors.textPrimary),
         ),
         backgroundColor: dark ? UColors.primary : UColors.secondary,
       ),

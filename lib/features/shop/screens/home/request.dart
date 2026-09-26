@@ -87,11 +87,11 @@ class _RequestBookScreenState extends State<RequestBookScreen> {
     bool dark = UHelperFunctions.isDarkMode(context);
 
     return Scaffold(
-      backgroundColor: dark ? UColors.light : UColors.dark,
+      backgroundColor: dark ? UColors.primary : UColors.secondary,
       appBar: AppBar(
         title: Text("Submit Book Request",
             style: TextStyle(
-                color: dark ? UColors.dark : UColors.light, fontSize: 18.sp)),
+                color: dark ? UColors.textSecondary : UColors.textSecondary, fontSize: 18.sp)),
         backgroundColor: dark ? UColors.primary : UColors.secondary,
       ),
       body: SingleChildScrollView(

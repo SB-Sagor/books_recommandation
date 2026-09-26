@@ -102,7 +102,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             Text(
                               "Sign Up",
                               style: TextStyle(
-                                color: Colors.white,
+                                color: UColors.textPrimary,
                                 fontSize: 34,
                                 fontWeight: FontWeight.bold,
                               ),

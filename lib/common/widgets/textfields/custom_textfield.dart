@@ -41,7 +41,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       child: TextFormField(
         controller: widget.controller,
         style: widget.textStyle ??
-            TextStyle(color: dark ? UColors.dark : UColors.light),
+            TextStyle(color: dark ? UColors.textSecondary : UColors.textPrimary),
         obscureText: widget.isPassword ? _isObscured : false,
         keyboardType: widget.keyboardType,
         validator: widget.validator,

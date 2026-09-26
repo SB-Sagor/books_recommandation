@@ -1,4 +1,5 @@
 import 'package:book_store/common/widgets/buttons/custom_button.dart';
+import 'package:book_store/utils/constants/color.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -39,13 +40,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor:UColors.secondary,
       appBar: AppBar(
         title: Text(
           "Forget Password",
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: UColors.primary),
         ),
-        backgroundColor: Colors.black,
+        backgroundColor: UColors.secondary,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -56,19 +57,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             children: [
               Text(
                 "Enter your email to receive a password reset link",
-                style: TextStyle(color: Colors.white, fontSize: 18),
+                style: TextStyle(color: UColors.primary, fontSize: 18),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 20),
               TextFormField(
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: UColors.primary),
                 decoration: InputDecoration(
                   labelText: "Email",
                   hintText: "Enter your email",
-                  labelStyle: TextStyle(color: Colors.white),
-                  prefixIcon: Icon(Icons.email, color: Colors.white),
+                  labelStyle: TextStyle(color: UColors.primary),
+                  prefixIcon: Icon(Icons.email, color: UColors.primary),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.red),
                   ),

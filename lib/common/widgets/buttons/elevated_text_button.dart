@@ -17,7 +17,7 @@ class UElevatedTextButton extends StatelessWidget {
         onPressed: onPressed,
         child: Text(
           text,
-          style: TextStyle(color: dark ? UColors.dark : UColors.light),
+          style: TextStyle(color: dark ? UColors.textPrimary : UColors.textSecondary),
         ));
   }
 }

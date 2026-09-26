@@ -17,7 +17,7 @@ class UserScreen extends StatelessWidget {
     final bool dark = UHelperFunctions.isDarkMode(context);
 
     return Scaffold(
-      backgroundColor: dark ? UColors.light : UColors.dark,
+      backgroundColor: dark ? UColors.primary : UColors.secondary,
       appBar: AppBar(
         backgroundColor: dark ? UColors.primary : UColors.secondary,
       ),
@@ -93,7 +93,7 @@ class UserScreen extends StatelessWidget {
       title: Text(
         title,
         style: TextStyle(
-          color: dark ? UColors.secondary : UColors.primary,
+          color: dark ? UColors.textSecondary : UColors.textPrimary,
           fontSize: 16,
         ),
       ),

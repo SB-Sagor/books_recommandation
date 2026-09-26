@@ -26,36 +26,36 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> loginWithEmail() async {
     try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
-      );
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+            email: emailController.text.trim(),
+            password: passwordController.text.trim(),
+          );
 
       User? user = userCredential.user;
 
       if (user != null) {
         if (user.emailVerified) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Login successful!')),
-          );
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text('Login successful!')));
 
           // Navigate to home screen
-          Navigator.pushReplacement(
+          Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => NavigationMenu()),
+            ((route) => false),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-                content: Text('Please verify your email before logging in.')),
+              content: Text('Please verify your email before logging in.'),
+            ),
           );
         }
       }
     } on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.message ?? 'Login failed')),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.message ?? 'Login failed')));
     }
   }
 
@@ -68,19 +68,19 @@ class _LoginScreenState extends State<LoginScreen> {
           Expanded(
             child: Stack(
               children: [
-                ULoginImage(
-                  image: UImages.loginPage,
-                ),
+                ULoginImage(image: UImages.loginPage),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: SingleChildScrollView(
                     child: Container(
                       height: MediaQuery.of(context).size.height * 0.6,
                       decoration: BoxDecoration(
-                          color: dark ? UColors.primary : UColors.secondary,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(80),
-                              topRight: Radius.circular(80))),
+                        color: dark ? UColors.primary : UColors.secondary,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(80),
+                          topRight: Radius.circular(80),
+                        ),
+                      ),
                       child: Form(
                         key: _formKey,
                         child: Column(
@@ -90,13 +90,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             Text(
                               "Sign In",
                               style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 34,
-                                  fontWeight: FontWeight.bold),
+                                color: UColors.textPrimary,
+                                fontSize: 34,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                            SizedBox(
-                              height: 8,
-                            ),
+                            SizedBox(height: 8),
                             CustomTextFormField(
                               controller: emailController,
                               labelText: "Email",
@@ -108,8 +107,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   return "Please enter your email";
                                 }
                                 if (!RegExp(
-                                        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
-                                    .hasMatch(value)) {
+                                  r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                                ).hasMatch(value)) {
                                   return "Enter a valid email";
                                 }
                                 return null;
@@ -136,15 +135,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          ForgotPasswordScreen()),
+                                    builder: (context) =>
+                                        ForgotPasswordScreen(),
+                                  ),
                                 );
                               },
-                              child: Text("Forgot Password?",
-                                  style: TextStyle(
-                                      color: dark
-                                          ? UColors.dark
-                                          : UColors.success)),
+                              child: Text(
+                                "Forgot Password?",
+                                style: TextStyle(
+                                  color: dark ? UColors.dark : UColors.success,
+                                ),
+                              ),
                             ),
                             customButton("Login", () {
                               if (_formKey.currentState!.validate()) {
@@ -156,7 +157,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => RegisterScreen()),
+                                    builder: (context) => RegisterScreen(),
+                                  ),
                                 );
                               },
                               text: "Don't have an account? Sign up",

@@ -24,34 +24,34 @@ class NavigationMenu extends StatelessWidget {
           elevation: 0,
           backgroundColor: dark ? UColors.primary : UColors.secondary,
           indicatorColor: dark
-              ? UColors.secondary.withValues(alpha: 0.6)
-              : UColors.primary.withValues(alpha: 0.6),
+              ? UColors.primary.withValues(alpha: 0.6)
+              : UColors.secondary.withValues(alpha: 0.6),
           selectedIndex: controller.selectedIndex,
           onDestinationSelected: controller.updateIndex,
           destinations: [
             NavigationDestination(
                 icon: Icon(
                   Iconsax.home,
-                  color: UColors.accent,
+                  color: UColors.primary,
                 ),
                 label: 'Home'),
             NavigationDestination(
               icon: Icon(
                 Iconsax.repeat,
-                color: UColors.accent,
+                color: UColors.primary,
               ),
               label: 'Reply',
             ),
             NavigationDestination(
                 icon: Icon(
                   Iconsax.send,
-                  color: UColors.accent,
+                  color: UColors.primary,
                 ),
                 label: 'Request'),
             NavigationDestination(
               icon: Icon(
                 Iconsax.user,
-                color: UColors.accent,
+                color: UColors.primary,
               ),
               label: 'Profile',
             ),

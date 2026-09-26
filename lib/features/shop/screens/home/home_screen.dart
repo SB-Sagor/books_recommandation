@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:book_store/controller/home_helper.dart';
-import 'package:book_store/features/screens/login/login_screen.dart';
 import 'package:book_store/services/book_service.dart';
 import 'package:book_store/utils/constants/color.dart';
 import 'package:book_store/utils/helpers/helper_functions.dart';
@@ -84,12 +83,14 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     bool dark = UHelperFunctions.isDarkMode(context);
     return Scaffold(
-      backgroundColor: dark ? UColors.white : UColors.dark,
+      backgroundColor: dark ? UColors.primary : UColors.secondary,
       appBar: AppBar(
-        title: Text("Book Recommended",
-            style: TextStyle(
-                color: dark ? UColors.dark : UColors.light,
-                fontWeight: FontWeight.bold)),
+        title: Center(
+          child: Text("Book Recommended",
+              style: TextStyle(
+                  color:UColors.primary,
+                  fontWeight: FontWeight.bold)),
+        ),
         backgroundColor: dark ? UColors.primary : UColors.secondary,
       ),
       body: Column(
@@ -112,11 +113,11 @@ class _HomeScreenState extends State<HomeScreen> {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: TextField(
-        style: TextStyle(color: dark ? UColors.secondary : UColors.primary),
+        style: TextStyle(color: dark ? UColors.textSecondary : UColors.textPrimary),
         controller: searchController,
         decoration: InputDecoration(
           labelText: "Search Books",
-          labelStyle: TextStyle(color: dark ? UColors.accent : UColors.accent),
+          labelStyle: TextStyle(color: dark ? UColors.textSecondary : UColors.textPrimary),
           hintText: "Enter book name...",
           prefixIcon: const Icon(Icons.search),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(22.0)),
@@ -138,7 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: dark ? UColors.secondary : UColors.primary)),
+                      color: dark ? UColors.textSecondary : UColors.textPrimary)),
             ),
             SizedBox(
               height: 220,
@@ -165,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
       return Center(
           child: Text(
         "No recommendations found",
-        style: TextStyle(color: dark ? UColors.primary : UColors.secondary),
+        style: TextStyle(color: dark ? UColors.textSecondary : UColors.textPrimary),
       ));
     }
     return ListView.builder(

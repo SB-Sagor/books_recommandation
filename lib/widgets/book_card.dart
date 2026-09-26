@@ -1,3 +1,4 @@
+import 'package:book_store/utils/constants/color.dart';
 import 'package:flutter/material.dart';
 
 class BookCard extends StatelessWidget {
@@ -17,14 +18,18 @@ class BookCard extends StatelessWidget {
         width: 140,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: Colors.grey[200],
+          color: UColors.secondary,
+          border: Border.all(
+            color: UColors.textPrimary.withValues(alpha: 0.2),
+            width: 1.2,
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               child: ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
                 child: imageUrl != null
                     ? Image.network(imageUrl, fit: BoxFit.cover, width: double.infinity)
                     : const Center(child: Icon(Icons.book, size: 50, color: Colors.grey)),
